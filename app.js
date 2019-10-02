@@ -13,7 +13,7 @@ var callback = function(request, response){
     var parts = url.parse(request.url);
 
     if(parts.path == '/'){
-        response.end('estamos no root');
+        response.end('estamos no root 3');
     }
     else if(parts.path == '/carros'){
         response.end(JSON.stringify({'URL': 'Carros', 'Index' : 2}));
