@@ -1,32 +1,25 @@
 var http = require('http');
 var url = require('url');
-
-
-//teste html via JSON
-function htmlJSON (){
-    return '<h1>HTML WORKS TOO!!</h2>';
-}
+var api = require('./externo.js')
+var controle = require('./controle.js');
 
 var callback = function(request, response){
-    response.writeHead(200, {'Content-Type' : 'text/plain'});
+    response.writeHead(200, {'Content-Type': 'text/plain'});
 
-    var parts = url.parse(request.url);
+    var path = url.parse(request.url).path;
 
-    if(parts.path == '/'){
-        response.end('estamos no root 3');
+    if(path =='/all'){
+        let retorno = api.selectAll;
+
+        response.end(JSON.stringify(JSON.stringify(retorno)));
     }
-    else if(parts.path == '/carros'){
-        response.end(JSON.stringify({'URL': 'Carros', 'Index' : 2}));
-    }
-    else if(parts.path == '/html'){
-        response.end(htmlJSON());
+    else if(path =='/list'){
+        response.end(controle.formatCarros(api.selectAll));
     }
     else{
-        response.end('Aonde estamos???');
+        response.end('Something ELSE');
     }
-
-
-};
+}
 
 var server = http.createServer(callback);
 server.listen('3000');
