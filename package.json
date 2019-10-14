@@ -15,5 +15,8 @@
     "json"
   ],
   "author": "Lucas Floriano",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.17.1"
+  }
 }
