@@ -1,7 +1,5 @@
 var http = require('http');
 var url = require('url');
-var api = require('./externo.js')
-var controle = require('./controle.js');
 var dbConnection = require('./dbConnection.js');
 
 var callback = function(request, response){
@@ -9,17 +7,12 @@ var callback = function(request, response){
 
     var path = url.parse(request.url).path;
 
-    if(path =='/all'){
-        let retorno = api.selectAll;
-
-        response.end(JSON.stringify(JSON.stringify(retorno)));
-    }
-    else if(path =='/list'){
-        response.end(controle.formatCarros(api.selectAll));
-    }
-    else if(path == '/mysql'){        
+    if(path =='/'){
+        response.end('Server root!');
+    }    
+    else if(path == '/select'){        
         let retorno =[]; 
-        dbConnection.dbCarros.selectAllCarrosPromise(function(error, results){
+        dbConnection.dbCarros.selectAllCarros(function(error, results){
             //Push elements to be returned
             results.map((element)=>{
                 retorno.push({Id: element.Id, Modelo: element.Modelo, Placa: element.Placa});
@@ -28,12 +21,18 @@ var callback = function(request, response){
             response.end(JSON.stringify(retorno));
         });        
     }
-    else if(path = '/insert'){
-        dbConnection.dbCarros.InsertCarro();
+    else if(path == '/insert'){
+        let carro = {Modelo: 'Fusca', Placa: 'FFF0000'};
+
+        dbConnection.dbCarros.InsertCarro(carro);
         response.end('Insert bem sucedido?');
     }
+    else if(path == '/delete'){
+        dbConnection.dbCarros.DeleteCarro(39);
+        response.end();
+    }
     else{
-        response.end('Something ELSE');
+        response.end('Not found!');
     }
 }
 
